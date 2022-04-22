@@ -3,6 +3,7 @@ const db = require('./db/connection');
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
+const { removeListener } = require('./db/connection');
 
 // Start server after DB connection
 db.connect(err => {
@@ -15,8 +16,11 @@ const userQuestions = [
     {
         type: 'list',
         name: 'prompt',
-        message: 'What would you like to do?',
-        choices: ['Add Department', 
+        message: 'Welcome! What would you like to do?',
+        choices: ['View Departments',
+                  'View Roles',
+                  'View Employees',
+                  'Add Department', 
                   'Add Role', 
                   'Add Employee', 
                   'Update Employee Role', 
@@ -27,6 +31,18 @@ const userQuestions = [
                   'Delete Role', 
                   'Delete Employee', 
                   'View Department Budget']
+    },
+    {
+        type: 'input',
+        name: 'view'
+    },
+    {
+        type: 'input',
+        name: 'view'
+    },
+    {
+        type: 'input',
+        name: 'view'
     },
     {
         type: 'input',
@@ -42,7 +58,7 @@ const userQuestions = [
     },
     {
         type: 'input',
-        name: 'salary',
+        name: 'roleSalary',
         message: 'What is the Salary of this Role?',
         when: ({ prompt }) => prompt === 'Add Role'
     },
@@ -84,7 +100,19 @@ const userQuestions = [
     }
 ]
 
+// function to initialize app
+function init() {
+    inquirer.prompt(userQuestions)
+        .then((userAnswers) => {
+            return cTable.userAnswers;
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
 
+// function call to initialize app
+init();
 
 
 
