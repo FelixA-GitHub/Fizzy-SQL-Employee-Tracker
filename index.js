@@ -10,14 +10,17 @@ const db = mysql.createConnection(
       // MySQL username,
       user: 'root',
       // MySQL password}
-      password: '',
-      //port
-      port: 3006,
+      password: 'root',
       //database name
       database: 'business_db'
     },
     console.log(`Connected to the business_db database.`)
   );
+
+  db.connect(function (err) {
+      if(err) throw err;
+  });
+
 
 
 
