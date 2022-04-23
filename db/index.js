@@ -6,34 +6,34 @@ class DB {
         this.connection = connection;
     }
     findAllEmployees(){
-        return this.connection.promise().query('SELECT')
+        return this.connection.promise().query('SELECT employee.first_name, employee.last_name, employee.role_id, employee.manager_id FROM employee;');
     }
     findAllPossibleManagers(employeeId){
-        return this.connection.promise().query('SELECT', employeeId)
+        return this.connection.promise().query('SELECT', employeeId);
     }
     createEmployee(employee){
-        return this.connection.promise().query('SELECT', employee)
+        return this.connection.promise().query('SELECT', employee);
     }
     removeEmployee(employeeId){
-        return this.connection.promise().query('SELECT', employeeId)
+        return this.connection.promise().query('SELECT', employeeId);
     }
     updateEmployeeRole(employeeId, roleId){
-        return this.connection.promise().query('SELECT', [roleId, employeeId])
+        return this.connection.promise().query('SELECT', [roleId, employeeId]);
     }
     findAllRoles(){
-        return this.connection.promise().query('SELECT')
+        return this.connection.promise().query('SELECT role.title, role.salary, role.department_id FROM role;');
     }
     createRole(role){
-        return this.connection.promise().query('SELECT', role)
+        return this.connection.promise().query('SELECT', role);
     }
     // removeEmployee(){
     //     return this.connection.promise().query('SELECT')
     // }
     findAllDepartments(){
-        return this.connection.promise().query('SELECT department.id, department.name FROM department;');
+        return this.connection.promise().query('SELECT department.name FROM department;');
     }
     createDepartment(department){
-        return this.connection.promise().query('SELECT', department)
+        return this.connection.promise().query('INSERT INTO department SET ?;', department);
     }
     // removeDepartment(departmentId){
     //     return this.connection.promise().query('SELECT', departmentId)

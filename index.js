@@ -141,6 +141,36 @@ function viewDepartments() {
         .then(() => userQuestions())
 }
 
+function viewRoles() {
+    db.findAllRoles()
+        .then(([rows]) => {
+            console.table(rows);
+        })
+        .then(() => userQuestions())
+}
+
+function viewEmployees() {
+    db.findAllEmployees()
+        .then(([rows]) => {
+            console.table(rows);
+        })
+        .then(() => userQuestions())
+}
+
+function addDepartment() {
+    prompt([
+        {
+            name: 'name',
+            message: 'What is the name of the department you would like to add?'
+        }
+    ]).then(result => {
+        let name = result;
+        db.createDepartment(name)
+            .then(() => console.log(`Added ${name.name} to the database!`))
+            .then(() => userQuestions())
+    })
+}
+
 //run
 function init() {
             userQuestions();
