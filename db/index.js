@@ -12,7 +12,7 @@ class DB {
         return this.connection.promise().query('SELECT', employeeId);
     }
     createEmployee(employee){
-        return this.connection.promise().query('SELECT', employee);
+        return this.connection.promise().query('INSERT INTO employee SET ?', employee);
     }
     removeEmployee(employeeId){
         return this.connection.promise().query('SELECT', employeeId);
