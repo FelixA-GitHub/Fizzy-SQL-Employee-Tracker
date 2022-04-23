@@ -106,7 +106,7 @@ function userQuestions() {
             case 'UPDATE_EMPLOYEE_ROLE':
                 updateEmployeeRole();
                 break;
-            default: 
+            default:
                 quit();
             // case 'VIEW_DEPARTMENTS':
             //     viewDepartments();
@@ -171,10 +171,46 @@ function addDepartment() {
     })
 }
 
+function addRole() {
+    //find all departments to choose from
+    db.findAllDepartments()
+        .then(([rows]) => {
+            let departments = rows;
+            const departmentChoice = departments.map(({ id, name }) => (
+                {
+                    value: id,
+                    name: name
+                }
+            ));
+        prompt([
+            {
+                name: 'title',
+                message: 'What is the title of the role you would like to add?'
+            },
+            {
+                name: 'salary',
+                message: 'What is the salary for the role you would like to add?'
+            },
+            {
+                type: 'list',
+                name: 'department_id',
+                message: 'What is the department for the role you would like to add?',
+                choices: departmentChoice
+            }
+        ])
+        .then(role => {
+            db.createRole(role)
+                .then(() => console.log(`Added ${role.title} to the database!`))
+                .then(() => userQuestions())
+        })
+    })
+}
+
+
 //run
 function init() {
-            userQuestions();
-        }
+    userQuestions();
+}
 
 // function call to initialize app
 init();
