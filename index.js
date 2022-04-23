@@ -1,6 +1,7 @@
 //dependencies
 const db = require('./db');
 const { prompt } = require('inquirer');
+const { dirSync } = require('tmp');
 require('console.table');
 
 // Start server after DB connection
@@ -182,74 +183,102 @@ function addRole() {
                     name: name
                 }
             ));
-        prompt([
-            {
-                name: 'title',
-                message: 'What is the title of the role you would like to add?'
-            },
-            {
-                name: 'salary',
-                message: 'What is the salary for the role you would like to add?'
-            },
-            {
-                type: 'list',
-                name: 'department_id',
-                message: 'What is the department for the role you would like to add?',
-                choices: departmentChoice
-            }
-        ])
-        .then(role => {
-            db.createRole(role)
-                .then(() => console.log(`Added ${role.title} to the database!`))
-                .then(() => userQuestions())
+            prompt([
+                {
+                    name: 'title',
+                    message: 'What is the title of the role you would like to add?'
+                },
+                {
+                    name: 'salary',
+                    message: 'What is the salary for the role you would like to add?'
+                },
+                {
+                    type: 'list',
+                    name: 'department_id',
+                    message: 'What is the department for the role you would like to add?',
+                    choices: departmentChoice
+                }
+            ])
+                .then(role => {
+                    db.createRole(role)
+                        .then(() => console.log(`Added ${role.title} to the database!`))
+                        .then(() => userQuestions())
+                })
         })
-    })
 }
 
 function addEmployee() {
-    //find all managers to choose from
-    db.findAllPossibleManagers()
-        .then(([rows]) => {
-            let managers = rows;
-            const managerChoice = managers.map(({ id, first_name, last_name }) => (
-                {
-                    value: id,
-                    name: `${first_name}${last_name}`
-                }
-            ));
-        prompt([
-            {
-                name: 'first_name',
-                message: 'What is the first name of the employee you would like to add?'
-            },
-            {
-                name: 'last_name',
-                message: 'What is the last name for the employee you would like to add?'
-            },
-            {
-                name: 'role',
-                message: 'What is the role for the employee you would like to add?'
-            },
-            {
-                type: 'list',
-                name: 'manager_id',
-                message: 'Who is the manager for the employee you would like to add?',
-                choices: managerChoice
-            }
-        ])
-        .then(employee => {
-            db.createEmployee(employee)
-                .then(() => console.log(`Added ${employee.first_name} ${employee.last_name} to the database!`))
-                .then(() => userQuestions())
-        })
-    })
-}
+    //prompt for first and last name
+    prompt([
+        {
+            name: 'first_name',
+            message: 'What is the first name of the employee you would like to add?'
+        },
+        {
+            name: 'last_name',
+            message: 'What is the last name for the employee you would like to add?'
+        },
+    ]).then((result) => {
+        //store results
+        let firstName = result.first_name;
+        let lastName = result.last_name;
+
+        //make list of available roles
+        db.findAllRoles()
+            .then(([rows]) => {
+                let roles = rows;
+                const roleChoice = roles.map(({ id, title }) => (
+                    {
+                        value: id,
+                        name: title
+                    }
+                ));
+                prompt([
+                    {
+                        type: 'list',
+                        name: 'role_id',
+                        message: 'What is the role you would like to choose?',
+                        choices: roleChoice
+                    }
+                ]).then((result) => {
+                    //store results
+                    let roleId = result.role_id;
+
+                    //find all managers to choose from
+                    db.findAllPossibleManagers()
+                        .then(([rows]) => {
+                            let managers = rows;
+                            const managerChoice = managers.map(({ id, first_name, last_name }) => (
+                                {
+                                    value: id,
+                                    name: `${first_name}${last_name}`
+                                }
+                            ));
+                            prompt([
+                                {
+                                    type: 'list',
+                                    name: 'manager_id',
+                                    message: 'Who is the manager you would like to choose?',
+                                    choices: managerChoice
+                                }
+                            ]).then(result => {
+                                //store results
+                                let manager = result.manager;
+                            })
+                            db.createEmployee(employee)
+                                .then(() => console.log(`Added ${employee.first_name} ${employee.last_name} to the database!`))
+                                .then(() => userQuestions())
+
+                        })
+                })
+            })
+    }
 
 
 //run
 function init() {
-    userQuestions();
-}
+            userQuestions();
+        }
 
 // function call to initialize app
 init();

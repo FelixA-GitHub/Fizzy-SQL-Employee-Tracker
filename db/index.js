@@ -9,7 +9,7 @@ class DB {
         return this.connection.promise().query('SELECT employee.id, employee.first_name, employee.last_name, employee.role_id, employee.manager_id FROM employee;');
     }
     findAllPossibleManagers(employeeId){
-        return this.connection.promise().query('SELECT', employeeId);
+        return this.connection.promise().query('SELECT employee.first_name, employee.last_name WHERE employee != ?', employeeId);
     }
     createEmployee(employee){
         return this.connection.promise().query('INSERT INTO employee SET ?', employee);
