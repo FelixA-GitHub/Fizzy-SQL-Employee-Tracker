@@ -217,7 +217,7 @@ function addEmployee() {
         {
             name: 'last_name',
             message: 'What is the last name for the employee you would like to add?'
-        },
+        }
     ]).then((result) => {
         //store results
         let firstName = result.first_name;
@@ -244,11 +244,11 @@ function addEmployee() {
                     //store results
                     let roleId = result.role_id;
 
-                    //find all managers to choose from
-                    db.findAllPossibleManagers()
+                    //find all managers from employee list
+                    db.findAllEmployees()
                         .then(([rows]) => {
-                            let managers = rows;
-                            const managerChoice = managers.map(({ id, first_name, last_name }) => (
+                            let employees = rows;
+                            const managerChoice = employees.map(({ id, first_name, last_name }) => (
                                 {
                                     value: id,
                                     name: `${first_name}${last_name}`
@@ -263,22 +263,82 @@ function addEmployee() {
                                 }
                             ]).then(result => {
                                 //store results
-                                let manager = result.manager;
+                                let employee = {
+                                    first_name: firstName,
+                                    last_name: lastName,
+                                    role_id: roleId,
+                                    manager_id: result.managerId
+                                }
+                                //create employee
+                                db.createEmployee(employee)
+                                    .then(() => console.log(`Added ${employee.first_name} ${employee.last_name} to the database!`))
+                                    .then(() => userQuestions())
                             })
-                            db.createEmployee(employee)
-                                .then(() => console.log(`Added ${employee.first_name} ${employee.last_name} to the database!`))
-                                .then(() => userQuestions())
-
                         })
                 })
             })
-    }
+    })
+}
+
+function updateEmployeeRole() {
+    //choose from available employees
+    db.findAllEmployees()
+        .then(([rows]) => {
+            employees = rows;
+            const employeeChoice = employees.map(({ id, first_name, last_name }) => (
+                {
+                    value: id,
+                    name: `${first_name}${last_name}`
+                }
+            ));
+            prompt([
+                {
+                    type: 'list',
+                    name: 'employee_id',
+                    message: 'You want to update the role of which employee?',
+                    choices: employeeChoice
+                }
+            ]).then((result) => {
+                let employeeId = result.employee_id;
+
+                //choose from available roles
+                db.findAllRoles()
+                    .then(([rows]) => {
+                        roles = rows;
+                        const roleChoice = roles.map(({ id, title }) => (
+                            {
+                                value: id,
+                                name: title
+                            }
+                        ));
+                        prompt([
+                            {
+                                type: 'list',
+                                name: 'role_id',
+                                message: 'What is the new role?',
+                                choices: roleChoice
+                            }
+                        ]).then(result => {
+                            //store results
+                            let employee = {
+                                employeeId: result.employee_id,
+                                roleId: result.role_id
+                            }
+                            //update employee
+                            db.updateEmployeeRole()
+                                .then(() => console.log(`Updated ${employee.first_name} ${employee.last_name}'s role to ${employee.role_id} in the database!`))
+                                .then(() => userQuestions())
+                        })
+                    })
+            })
+        })
+}
 
 
 //run
 function init() {
-            userQuestions();
-        }
+    userQuestions();
+}
 
 // function call to initialize app
 init();
