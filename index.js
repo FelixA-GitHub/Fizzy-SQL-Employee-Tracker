@@ -251,7 +251,7 @@ function addEmployee() {
                             const managerChoice = employees.map(({ id, first_name, last_name }) => (
                                 {
                                     value: id,
-                                    name: `${first_name}${last_name}`
+                                    name: `${first_name} ${last_name}`
                                 }
                             ));
                             prompt([
@@ -288,7 +288,7 @@ function updateEmployeeRole() {
             const employeeChoice = employees.map(({ id, first_name, last_name }) => (
                 {
                     value: id,
-                    name: `${first_name}${last_name}`
+                    name: `${first_name} ${last_name}`
                 }
             ));
             prompt([
@@ -318,17 +318,9 @@ function updateEmployeeRole() {
                                 message: 'What is the new role?',
                                 choices: roleChoice
                             }
-                        ]).then(result => {
-                            //store results
-                            let employee = {
-                                employeeId: result.employee_id,
-                                roleId: result.role_id
-                            }
-                            //update employee
-                            db.updateEmployeeRole()
-                                .then(() => console.log(`Updated ${employee.first_name} ${employee.last_name}'s role to ${employee.role_id} in the database!`))
-                                .then(() => userQuestions())
-                        })
+                        ]).then(result => db.updateEmployeeRole(employeeId, result.roleId))
+                            .then(() => console.log(`Updated ${employee.first_name} ${employee.last_name}'s role to ${employee.role_id} in the database!`))
+                            .then(() => userQuestions())
                     })
             })
         })
