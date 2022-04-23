@@ -2,7 +2,7 @@
 const mysql = require('mysql2');
 
 // Connect to database
-const db = mysql.createConnection(
+const connection = mysql.createConnection(
     {
       host: 'localhost',
       // MySQL username,
@@ -14,11 +14,9 @@ const db = mysql.createConnection(
     },
     console.log(`Connected to the business_db database.`)
   );
-  db.promise().query("SELECT 1")
-    .then(([rows,fields]) => {
-        console.log(rows);
-    })
-    .catch(console.log)
-    .then(() => db.end());  
+  connection.connect(err => {
+        if (err) throw err;
+        console.log('Database connected.');
+    });
 
-  module.exports = db;
+  module.exports = connection;

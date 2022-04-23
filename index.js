@@ -1,118 +1,154 @@
 //dependencies
-const db = require('./db/connection');
-const mysql = require('mysql2');
-const inquirer = require('inquirer');
-const cTable = require('console.table');
-const { removeListener } = require('./db/connection');
+const db = require('./db');
+const { prompt } = require('inquirer');
+require('console.table');
 
 // Start server after DB connection
-db.connect(err => {
-    if (err) throw err;
-    console.log('Database connected.');
-});
+// db.connect(err => {
+//     if (err) throw err;
+//     console.log('Database connected.');
+// });
 
 //userQuestions
-const userQuestions = [
-    {
-        type: 'list',
-        name: 'prompt',
-        message: 'Welcome! What would you like to do?',
-        choices: ['View Departments',
-                  'View Roles',
-                  'View Employees',
-                  'Add Department', 
-                  'Add Role', 
-                  'Add Employee', 
-                  'Update Employee Role', 
-                  'Update Employee Managers', 
-                  'View Employees By Manager', 
-                  'View Employees By Department', 
-                  'Delete Department', 
-                  'Delete Role', 
-                  'Delete Employee', 
-                  'View Department Budget']
-    },
-    {
-        type: 'input',
-        name: 'view'
-    },
-    {
-        type: 'input',
-        name: 'view'
-    },
-    {
-        type: 'input',
-        name: 'view'
-    },
-    {
-        type: 'input',
-        name: 'deptName',
-        message: 'What is the name of this Department?',
-        when: ({ prompt }) => prompt === 'Add Department'
-    },
-    {
-        type: 'input',
-        name: 'roleName',
-        message: 'What is the name of this Role?',
-        when: ({ prompt }) => prompt === 'Add Role'
-    },
-    {
-        type: 'input',
-        name: 'roleSalary',
-        message: 'What is the Salary of this Role?',
-        when: ({ prompt }) => prompt === 'Add Role'
-    },
-    {
-        type: 'input',
-        name: 'roleDept',
-        message: 'What is the Department of this Role?',
-        when: ({ prompt }) => prompt === 'Add Role'
-    },
-    {
-        type: 'input',
-        name: 'empFirstName',
-        message: 'What is the First Name of this Employee?',
-        when: ({ prompt }) => prompt === 'Add Employee'
-    },
-    {
-        type: 'input',
-        name: 'empLastName',
-        message: 'What is the Last Name of this Employee?',
-        when: ({ prompt }) => prompt === 'Add Employee'
-    },
-    {
-        type: 'input',
-        name: 'empRole',
-        message: 'What is the Role of this Employee?',
-        when: ({ prompt }) => prompt === 'Add Employee'
-    },
-    {
-        type: 'input',
-        name: 'empManager',
-        message: 'Who is the Manager for this Employee?',
-        when: ({ prompt }) => prompt === 'Add Employee'
-    },
-    {//need to generate a list of employees to select from and update the selected employee's role
-        type: 'input',
-        name: 'updateRole',
-        message: 'Please select an Employee.',
-        when: ({ prompt }) => prompt === 'Update Employee Role'
-    }
-]
+function userQuestions() {
+    prompt([
+        {
+            type: 'list',
+            name: 'prompt',
+            message: 'Welcome! What would you like to do?',
+            choices: [
+                {
+                    name: 'View Departments',
+                    value: 'VIEW_DEPARTMENTS'
+                },
+                {
+                    name: 'View Roles',
+                    value: 'VIEW_ROLES'
+                },
+                {
+                    name: 'View Employees',
+                    value: 'VIEW_EMPLOYEES'
+                },
+                {
+                    name: 'Add Department',
+                    value: 'ADD_DEPARTMENT'
+                },
+                {
+                    name: 'Add Role',
+                    value: 'ADD_ROLE'
+                },
+                {
+                    name: 'Add Employee',
+                    value: 'ADD_EMPLOYEE'
+                },
+                {
+                    name: 'Update Employee Role',
+                    value: 'UPDATE_EMPLOYEE_ROLE'
+                },
+                // {
+                //     value: new inquirer.Separator()
+                // },
+                // {
+                //     name: 'Update Employee Manager',
+                //     value: 'UPDATE_EMPLOYEE_MANAGER'
+                // },
+                // {
+                //     name: 'View Employees By Manager',
+                //     value: 'VIEW_EMPLOYEES_BY_MANAGER'
+                // },
+                // {
+                //     name: 'View Employees By Department',
+                //     value: 'VIEW_EMPLOYEES_BY_DEPARTMENT'
+                // },
+                // {
+                //     name: 'Delete Department',
+                //     value: 'REMOVE_DEPARTMENT'
+                // },
+                // {
+                //     name: 'Delete Role',
+                //     value: 'REMOVE_ROLE'
+                // },
+                // {
+                //     name: 'Delete Employee',
+                //     value: 'REMOVE_EMPLOYEE'
+                // },
+                // {
+                //     name: 'View Department Budget',
+                //     value: 'VIEW_UTILIZED_BUDGET_BY_DEPARTMENT'
+                // },
+                {
+                    name: 'Quit',
+                    value: 'QUIT'
+                }
+            ]
+        }
+    ]).then((userAnswers) => {
+        var choice = userAnswers.prompt;
+        switch (choice) {
+            case 'VIEW_DEPARTMENTS':
+                viewDepartments();
+                break;
+            case 'VIEW_ROLES':
+                viewRoles();
+                break;
+            case 'VIEW_EMPLOYEES':
+                viewEmployees();
+                break;
+            case 'ADD_DEPARTMENT':
+                addDepartment();
+                break;
+            case 'ADD_ROLE':
+                addRole();
+                break;
+            case 'ADD_EMPLOYEE':
+                addEmployee();
+                break;
+            case 'UPDATE_EMPLOYEE_ROLE':
+                updateEmployeeRole();
+                break;
+            default: 
+                quit();
+            // case 'VIEW_DEPARTMENTS':
+            //     viewDepartments();
+            //     break;
+            // case 'VIEW_DEPARTMENTS':
+            //     viewDepartments();
+            //     break;
+            // case 'VIEW_DEPARTMENTS':
+            //     viewDepartments();
+            //     break;
+            // case 'VIEW_DEPARTMENTS':
+            //     viewDepartments();
+            //     break;
+            // case 'VIEW_DEPARTMENTS':
+            //     viewDepartments();
+            //     break;
+            // case 'VIEW_DEPARTMENTS':
+            //     viewDepartments();
+            //     break;
+            // case 'VIEW_DEPARTMENTS':
+            //     viewDepartments();
+            //     break;
+        }
+    })
+}
 
-// function to initialize app
+function viewDepartments() {
+    db.findAllDepartments()
+        .then(([rows]) => {
+            console.table(rows);
+        })
+        .then(() => userQuestions())
+}
+
+//run
 function init() {
-    inquirer.prompt(userQuestions)
-        .then((userAnswers) => {
-            return cTable.userAnswers;
-        })
-        .catch(err => {
-            console.log(err);
-        })
-    }
+            userQuestions();
+        }
 
 // function call to initialize app
 init();
+
 
 
 
