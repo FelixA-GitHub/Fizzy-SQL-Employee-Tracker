@@ -318,13 +318,22 @@ function updateEmployeeRole() {
                                 message: 'What is the new role?',
                                 choices: roleChoice
                             }
-                        ]).then(result => db.updateEmployeeRole(employeeId, result.roleId))
-                            .then(() => console.log(`Updated ${employee.first_name} ${employee.last_name}'s role to ${employee.role_id} in the database!`))
-                            .then(() => userQuestions())
+                        ]).then((result) => {
+                            roleId = result.role_id;
+
+
+                            db.updateEmployeeRole(employeeId, roleId)
+                                .then(() => console.log(`Role updated in the database!`))
+                                .then(() => userQuestions())
+                        })
                     })
             })
         })
 }
+
+
+
+
 
 
 //run
