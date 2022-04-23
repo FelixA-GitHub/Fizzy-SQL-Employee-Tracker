@@ -18,7 +18,7 @@ class DB {
         return this.connection.promise().query('SELECT', employeeId);
     }
     updateEmployeeRole(employeeId, roleId){
-        return this.connection.promise().query('UPDATE employee SET role_id = ?', [employeeId, roleId]);
+        return this.connection.promise().query('UPDATE employee SET role_id = ? WHERE id = ?', [roleId, employeeId]);
     }
     findAllRoles(){
         return this.connection.promise().query('SELECT role.id, role.title, role.salary, role.department_id FROM role;');
