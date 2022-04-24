@@ -21,7 +21,7 @@ class DB {
         return this.connection.promise().query('UPDATE employee SET role_id = ? WHERE id = ?', [roleId, employeeId]);
     }
     findAllRoles(){
-        return this.connection.promise().query('SELECT role.id, role.title, role.salary, role.department_id FROM role;');
+        return this.connection.promise().query('SELECT role.title, role.id, role.department_id, role.salary FROM role INNER JOIN department ON role.department_id = department.id;');
     }
     createRole(role){
         return this.connection.promise().query('INSERT INTO role SET ?', role);
@@ -30,7 +30,7 @@ class DB {
     //     return this.connection.promise().query('SELECT')
     // }
     findAllDepartments(){
-        return this.connection.promise().query('SELECT department.id, department.name FROM department;');
+        return this.connection.promise().query('SELECT department.name AS Department_Name, department.id AS Department_ID FROM department;');
     }
     createDepartment(department){
         return this.connection.promise().query('INSERT INTO department SET ?;', department);
