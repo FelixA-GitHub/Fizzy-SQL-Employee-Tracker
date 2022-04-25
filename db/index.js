@@ -6,10 +6,10 @@ class DB {
         this.connection = connection;
     }
     findAllEmployees(){
-        return this.connection.promise().query('SELECT employee.id, employee.first_name, employee.last_name, employee.role_id, employee.manager_id FROM employee;');
+        return this.connection.promise().query('SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, employee.manager_id FROM employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role.department_id = department.id;');
     }
     findAllPossibleManagers(employeeId){
-        return this.connection.promise().query('SELECT employee.first_name, employee.last_name WHERE employee != ?', employeeId);
+        return this.connection.promise().query('SELECT employee.id, employee.first_name, employee.last_name WHERE employee != ?', employeeId);
     }
     createEmployee(employee){
         return this.connection.promise().query('INSERT INTO employee SET ?', employee);
@@ -21,7 +21,7 @@ class DB {
         return this.connection.promise().query('UPDATE employee SET employee.role_id = ? WHERE id = ?', [roleId, employeeId]);
     }
     findAllRoles(){
-        return this.connection.promise().query('SELECT role.title, role.id, role.department_id, role.salary FROM role;');
+        return this.connection.promise().query('SELECT role.title, role.id, department.name, role.salary FROM role INNER JOIN department ON role.department_id = department.id;');
     }
     createRole(role){
         return this.connection.promise().query('INSERT INTO role SET ?', role);
@@ -30,7 +30,7 @@ class DB {
     //     return this.connection.promise().query('SELECT')
     // }
     findAllDepartments(){
-        return this.connection.promise().query('SELECT department.name AS DEPARTMENT_NAME, department.id AS DEPARTMENT_ID FROM department;');
+        return this.connection.promise().query('SELECT department.name, department.id FROM department;');
     }
     createDepartment(department){
         return this.connection.promise().query('INSERT INTO department SET ?;', department);

@@ -1,7 +1,6 @@
 //dependencies
 const db = require('./db');
 const { prompt } = require('inquirer');
-const { dirSync } = require('tmp');
 require('console.table');
 
 // Start server after DB connection
@@ -331,18 +330,19 @@ function updateEmployeeRole() {
         })
 }
 
-
-
-
-
-
 //run
 function init() {
     userQuestions();
 }
 
-// function call to initialize app
+//function call to initialize app
 init();
+
+//quit app
+//process.exit() method instructs Node.js to terminate the process synchronously with an exit status of code. If code is omitted, exit uses either the 'success' code 0 or the value of process.exitCode if it has been set. Node.js will not terminate until all the 'exit' event listeners are called.
+function quit() {
+    process.exit();
+}
 
 
 
