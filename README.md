@@ -48,7 +48,7 @@
 ``
 <br>``THEN I am prompted to enter the name, salary, and department for the role and that role is added to the database
 ``
-<br>`WHEN I choose to add an employee
+<br>``WHEN I choose to add an employee
 ``
 <br>``THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database
 ``
@@ -58,25 +58,17 @@
 ``
 
 ## Screenshots:
-![Server.js Screenshot](./img/Screen%20Shot%20serverjs.png)
+![index Screenshot](./assets/img/index.png)
 
-![package.json Screenshot](./img/Screen%20Shot%20packagejson.png)
+![readme Screenshot](./assets/img/readme.png)
 
-![db.json Screenshot](./img/Screen%20Shot%20dbjson.png)
+![dbindex Screenshot](./assets/img/dbindex.png)
 
-![lib/notes.js Screenshot](./img/Screen%20Shot%20lib%20notesjs.png)
+![dbconnection Screenshot](./assets/img/dbconnection.png)
 
-![lib/notes.js Screenshot](./img/Screen%20Shot%20lib%20notesjs%202.png)
+![dbschemasql Screenshot](./assets/img/dbschemasql.png)
 
-![htmlRoutes/index.js Screenshot](./img/Screen%20Shot%20htmlRoutes%20indexjs.png)
-
-![apiRoutes/index.js Screenshot](./img/Screen%20Shot%20apiRoutes%20indexjs.png)
-
-![apiRoutes noteRoutes.js Screenshot](./img/Screen%20Shot%20apiRoutes%20noteRoutesjs%20.png)
-
-![apiRoutes noteRoutes.js --Bonus Delete-- Screenshot](./img/Screen%20Shot%20apiRoutes%20noteRoutesjs%20DELETE.png)
-
-![README.md Screenshot](./img/Screen%20Shot%20README.png)
+![dbseedssql Screenshot](./assets/img/sbseedssql.png)
 
 ## Questions:
 
