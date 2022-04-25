@@ -40,4 +40,5 @@ class DB {
     // }
 }
 
+//export
 module.exports = new DB (connection);

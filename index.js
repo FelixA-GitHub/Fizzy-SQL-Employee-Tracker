@@ -3,12 +3,6 @@ const db = require('./db');
 const { prompt } = require('inquirer');
 require('console.table');
 
-// Start server after DB connection
-// db.connect(err => {
-//     if (err) throw err;
-//     console.log('Database connected.');
-// });
-
 //userQuestions
 function userQuestions() {
     prompt([
@@ -83,7 +77,9 @@ function userQuestions() {
             ]
         }
     ]).then((userAnswers) => {
+        //takes all data from userAnswers under 'prompt' and stores them into 'choice' variable
         var choice = userAnswers.prompt;
+        //decides which function to run according to which 'choice' was selected
         switch (choice) {
             case 'VIEW_DEPARTMENTS':
                 viewDepartments();
@@ -132,8 +128,11 @@ function userQuestions() {
         }
     })
 }
-
+//view all departments
 function viewDepartments() {
+    //import findAllDepartments function from database folder
+    //then takes all rows as an obj and prints them in terminal using console.table
+    //then returns back to userQuestions list
     db.findAllDepartments()
         .then(([rows]) => {
             console.table(rows);
@@ -141,7 +140,11 @@ function viewDepartments() {
         .then(() => userQuestions())
 }
 
+//view all roles
 function viewRoles() {
+    //import findAllRoles function from database folder
+    //then takes all rows as an obj and prints them in terminal using console.table
+    //then returns back to userQuestions list
     db.findAllRoles()
         .then(([rows]) => {
             console.table(rows);
@@ -149,7 +152,11 @@ function viewRoles() {
         .then(() => userQuestions())
 }
 
+//view all employees
 function viewEmployees() {
+    //import findAllEmployees function from database folder
+    //then takes all rows as an obj and prints them in terminal using console.table
+    //then returns back to userQuestions list
     db.findAllEmployees()
         .then(([rows]) => {
             console.table(rows);
@@ -157,13 +164,16 @@ function viewEmployees() {
         .then(() => userQuestions())
 }
 
+//add new department
 function addDepartment() {
+    //prompt for name of new department
     prompt([
         {
             name: 'name',
             message: 'What is the name of the department you would like to add?'
         }
     ]).then(result => {
+        //the result is stored as name and ran through createDepartment function from database and stored
         let name = result;
         db.createDepartment(name)
             .then(() => console.log(`Added ${name.name} to the database!`))
@@ -171,11 +181,15 @@ function addDepartment() {
     })
 }
 
+//add a new role
 function addRole() {
     //find all departments to choose from
     db.findAllDepartments()
         .then(([rows]) => {
             let departments = rows;
+            //map() creates new array populated with the rows from departments which contain the id and name of the departments
+            //stores this new array within departmentChoice const
+            //allows all departments to be chosen from a list
             const departmentChoice = departments.map(({ id, name }) => (
                 {
                     value: id,
@@ -199,6 +213,7 @@ function addRole() {
                 }
             ])
                 .then(role => {
+                    //we create a new role now that we have department choices from above
                     db.createRole(role)
                         .then(() => console.log(`Added ${role.title} to the database!`))
                         .then(() => userQuestions())
@@ -206,6 +221,7 @@ function addRole() {
         })
 }
 
+//add a new employee
 function addEmployee() {
     //prompt for first and last name
     prompt([
@@ -279,6 +295,7 @@ function addEmployee() {
     })
 }
 
+//update employee role
 function updateEmployeeRole() {
     //choose from available employees
     db.findAllEmployees()
