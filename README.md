@@ -78,7 +78,7 @@ https://github.com/FelixA-GitHub
 
 Video Walkthrough:
 
-https://fizzy-note-taker.herokuapp.com
+https://drive.google.com/file/d/1o5WzXWUFlKBswzeFI94SaIvM2iohTXQM/view
 
 If you have additional questions, you can reach me at:
 
